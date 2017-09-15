@@ -100,10 +100,12 @@ MeshLabJsGui.prototype = {
 	        fileName = "tmp." + ext;
 	        format[format.length-1] = '';
 	        fileNameGlobal = files[0].name;
+	        alert(ext);
 	        switch(ext){
 	            case "off": {fileExtension='off'; break;}
 	            case "obj": {fileExtension='obj'; break;}
 	            case "ply": {fileExtension='ply'; break;}
+	            case "PLY": {fileExtension='ply'; break;}
 	            case "stl": {fileExtension='stl'; break;}
 	            case "vmi": {fileExtension='vmi'; break;}
 	            default : {

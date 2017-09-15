@@ -92,6 +92,13 @@
             
             MLJ.gui.disabledOnSceneEmpty(save);
             
+
+            var openWeb = new component.Button({
+                           tooltip: "Load a mesh file from the web. Warning: the destination \
+                                     server must support Cross-Origin Resource Sharing requests",
+                           icon: "img/icons/IcoMoon-Free-master/PNG/48px/0202-sphere.png"
+                        });
+            
             var reload = new component.Button({
                 tooltip: "Reload mesh file",
                 icon: "img/icons/IcoMoon-Free-master/PNG/48px/0133-spinner11.png"
@@ -141,13 +148,23 @@
             MLJ.gui.disabledOnSceneEmpty(resetTrackball);
             MLJ.gui.disabledOnSceneEmpty(uploadToWebsite);
             
-            _toolBar.add(open, save, uploadToWebsite, reload, resetTrackball, snapshot, deleteLayer);
+            _toolBar.add(open,openWeb,  save, uploadToWebsite, reload, resetTrackball, snapshot, deleteLayer);
 			_toolBar.add(doc,git);
 
             // SCENE BAR EVENT HANDLERS
             open.onChange(function (input) {
                 MLJ.core.File.openMeshFile(input.files);
             });
+            
+            openWeb.onClick(function () {
+            	                var url = prompt("Resource location:");
+            	                if (url) {
+            	                    console.log("Attempting to load mesh from " + url);
+            	                    MLJ.core.File.openFromWeb(url);
+            	                }
+            	            });
+            
+            
 			doc.onClick(function () {
 				 var win = window.open("./doc/html/", '_blank');
 					win.focus();
@@ -201,7 +218,7 @@
             
             uploadToWebsite.onClick(function() {
                 //TODO
-                var layer = MLJ.core.Scene.getSelectedLayer();
+                var layer = MLJ.core.Scene.getSelectedLafyer();
                 //Name = meshInfo[0], extension = meshInfo[meshInfo.length-1]
                 var meshInfo = layer.name.split(".");                
                 _dialogUpload.show();

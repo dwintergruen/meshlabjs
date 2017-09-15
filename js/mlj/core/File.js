@@ -56,7 +56,7 @@ MLJ.core.File = {
     var _openedList = new MLJ.util.AssociativeArray();
 
     function isExtensionValid(extension) {
-
+    	extension = extension.toLowerCase();
         switch (extension) {
             case ".off":
             case ".obj":
@@ -81,7 +81,6 @@ MLJ.core.File = {
             //  Emscripten need a Arrayview so from the returned arraybuffer we must create a view of it as 8bit chars
             var int8buf = new Int8Array(fileLoadedEvent.target.result);
             FS.createDataFile("/", file.name, int8buf, true, true);
-            
             console.time("Parsing Mesh Time");  
 //            console.log("File extension: " +file.name.split('.').pop());
             var resOpen = -1;
@@ -156,6 +155,29 @@ MLJ.core.File = {
         });
     };
 
+       //TODO sanity checks, port to jquery
+        this.openFromWeb = function (url) {
+           var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.responseType = "arraybuffer";
+    
+            xhr.onload = function (ev) {
+                var arrayBuffer = xhr.response;
+                if (arrayBuffer) {
+                    var name = url.substr(url.lastIndexOf('/')+1);
+                    var file = new File([arrayBuffer], "[WEB]"+name);
+                    MLJ.core.File.openMeshFile(file);
+                } else {
+                    console.warn("Http Request returned no data");
+                }
+            }
+            xhr.onerror = function () {
+                console.log("Http Request failed" + ((xhr.statusText) ? (" with status " + xhr.statusText) : ""));
+            };
+            xhr.send();
+    
+        };
+    
     /**
      * Reloads an existing layer, that is recovers the file linked to the layer
      * and reinitializes the cppMesh of the layer with it

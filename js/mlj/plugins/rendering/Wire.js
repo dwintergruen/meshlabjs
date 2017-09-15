@@ -4,7 +4,7 @@
     var DEFAULTS = {
         color: new THREE.Color('#505050'),
         specular: new THREE.Color('#505050'),
-        shininess: 15.0,
+        shininess: 1.0,
         thickness: 1.5,
         isShaded: 0,
         sides : THREE.DoubleSide // for backface culling
